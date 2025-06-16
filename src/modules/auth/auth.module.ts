@@ -35,7 +35,7 @@ import { APP_GUARD } from '@nestjs/core';
                 transport: Transport.RMQ,
                 options: {
                     urls: ['amqp://guest:guest@localhost:5672'],
-                    queue: 'ms-users',
+                    queue: 'ms_users',//Se conectando com a fila do ms_users;
                     queueOptions: {
                         durable: true
                     }

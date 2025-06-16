@@ -35,7 +35,7 @@ export class AuthController{
     }
 
     //Aqui iremos criar o endpoint que vai receber os dados da fila enviado pelo ms_users ao criar um usuário_
-    @EventPattern('ms_auth')
+    @EventPattern('ms_auth_pattern')
     handleEventpattern(@Payload() data){
         console.log(data);
     }
