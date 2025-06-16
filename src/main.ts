@@ -12,7 +12,7 @@ async function bootstrap() {
     transport: Transport.RMQ,
     options: {
       urls: ['amqp://guest:guest@localhost:5672'],//Endereço do rabbitmq no docker;
-      queue: 'authorizations_queue',
+      queue: 'ms_auth',//Nome da fila do ms_auth;
       queueOptions: {
         durable: true
       }
