@@ -1,6 +1,12 @@
+//Biblotecas para utilização do redis para definir sessões na aplicação_
+import * as session from 'express-session';
+import * as connectRedis from 'connect-redis';
+import * as redis from 'redis';
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+//O ThrottlerGuard funciona para limitar as infinitas tentativas de requisições nos endpoints da aplicação;
 import { ThrottlerGuard } from '@nestjs/throttler';
 
 async function bootstrap() {

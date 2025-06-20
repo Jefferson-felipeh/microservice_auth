@@ -95,4 +95,39 @@ JwtModule.registerAsync({
                 signOptions: config.access.signOptions
             }),
         })
-        
+
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+CRIANDO SESSÕES COM O BANCO DE DADOS REDIS_
+
+Instalação das dependencias_
+npm install express-session 
+npm install connect-redis
+npm install ioredis
+npm install redis
+
+Irei precisar instalar o servidor redis, para isso irei criar um container docker para rodar o servidor redis:
+com o comando: docker run -d --name redis-server -p 6379:6379 redis
+
+-d -> Roda em background
+--name redis-server -> Da um nome ao container
+-p 6379:6379 -> Mapeia a porta padrão do redis
+redis -> Usa a imagem oficial do redis no DockerHub
+
+Após isso será criado um uma imagem com um container docker do servidor redis rodando;
+Para verificar se o servidor redis esta funcionando, basta entrar no container com esse comando:
+docker exec -it redis-server redis-cli
+
+Após esse comando, voce entrará no container do servidor redis que esta rodando no docker,
+e para verificar se ele esta executando, digite o comando 'ping', e ele vai responder com 'PONG'.
+
+Por padrão, os dados são volateis(eles somes quando o container para), mas para persistir os dados armazenados,
+podemos criar um volume no docker para armazenar esses dados, iremos precisar deletar ou remover o server
+do redis criado no docker anteriormente, com o comando: 
+docker stop redis-server(Parar)
+docker rm redis-server(Remover)
+ 
+ e iremos criar um volume com o comando: 
+docker run -d --name redis-server -p 6379:6379 -v redis_data:/data redis --appendonly yes
+Após esse comando, será criado uma nova image com um novo container e um volume para persistir os dados
+do servidor do redis.
