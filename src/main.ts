@@ -24,6 +24,13 @@ async function bootstrap() {
       }
     }
   });
+
+    // Habilita CORS com configurações padrão
+  app.enableCors({
+    origin: 'http://localhost:4400', // Porta do seu frontend Angular
+    credentials: true
+  });
+  
   app.startAllMicroservices();//Inicia o RMQ;
   await app.listen(process.env.PORT ?? 3031);
 }
