@@ -8,6 +8,7 @@ import { JwtService } from "@nestjs/jwt";
 import { JWTConfig } from "src/common/config/jwt.config";
 import { ConfigType } from "@nestjs/config";
 import { TokenInterface } from "./interfaces/tokenInterface.interface";
+import { LoginUserDto } from "./dtos/loginUser.dto";
 
 @Injectable()
 export class AuthService{
@@ -21,7 +22,7 @@ export class AuthService{
         private jwtConfig:ConfigType<typeof JWTConfig>
     ){}
 
-    async signIn(email:string,password:string):Promise<object>{
+    async signIn(email:string,password:string):Promise<LoginUserDto>{
         try{
             //Estou buscando os dados do usuário com base no email fornecido por ele na requisição de login,
             //Esses dados de email e password vem do LocalStrategy capturado pelo UseGuards() no endpoint_
@@ -30,22 +31,31 @@ export class AuthService{
                 //o send() vai emitir uma mensagem e vai esperar um retorno_
                 this.clientUser.send('find-user-by-email',email.toLocaleLowerCase())
             );
+            //Os usuários já deve retornar tanto os dados do usuários, quanto os dados das suas permissões_
             if(!user || user == null) throw new UnauthorizedException('Email Inválido!');
-    
+            
+            console.log(user)
             //Aqui será construida a lógica de verificação das senhas, e da criação de tokens de autorização_
             const comparePassword = await this.verifyPasswords(password,user.password);
     
             if(!comparePassword) throw new UnauthorizedException('Senha Incorreta!');
-
             //Gerando o token de autorização_
             const token = this.generatedToken({user: user.email, sub:user.id});
 
             if(!token) throw new UnauthorizedException('Usuário não Autorizado!');
-    
-            return {
-                tokens: token,
-                user: user
+            
+            const obj = {
+                auth: token,
+                user: {
+                    id:user.id,
+                    firstname:user.firstname,
+                    lastname: user.lastname,
+                    email:user.email,
+                    cep:user.cep,
+                }
             };
+            console.log(obj);
+            return obj;
         }catch(error){
             throw new UnauthorizedException();
         }
