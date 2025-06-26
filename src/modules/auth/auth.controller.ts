@@ -3,6 +3,7 @@ import { EventPattern, Payload } from "@nestjs/microservices";
 import { Throttle } from "@nestjs/throttler";
 import { SignInDto } from "./dtos/signIn.dto";
 import { AuthService } from "./auth.service";
+import { LoginUserDto } from "./dtos/loginUser.dto";
 
 @Controller('auth')
 export class AuthController {
@@ -29,7 +30,7 @@ export class AuthController {
 
     @HttpCode(200)
     @Post('login')
-    async signIn(@Body() dataSignIn: SignInDto):Promise<object> {
+    async signIn(@Body() dataSignIn: SignInDto):Promise<LoginUserDto> {
         //Por isso, o endpoint pode ser simples_
         return this.authService.signIn(dataSignIn.email,dataSignIn.password);
     }
