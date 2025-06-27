@@ -31,12 +31,12 @@ export class AuthService{
                 //o send() vai emitir uma mensagem e vai esperar um retorno_
                 this.clientUser.send('find-user-by-email',email.toLocaleLowerCase())
             );
+            console.log(user)
             //Os usuários já deve retornar tanto os dados do usuários, quanto os dados das suas permissões_
             if(!user || user == null) throw new UnauthorizedException('Email Inválido!');
             
-            console.log(user)
             //Aqui será construida a lógica de verificação das senhas, e da criação de tokens de autorização_
-            const comparePassword = await this.verifyPasswords(password,user.password);
+            const comparePassword = await this.verifyPasswords(password,user.user.password);
     
             if(!comparePassword) throw new UnauthorizedException('Senha Incorreta!');
             //Gerando o token de autorização_
@@ -45,16 +45,21 @@ export class AuthService{
             if(!token) throw new UnauthorizedException('Usuário não Autorizado!');
             
             const obj = {
-                auth: token,
+                auth: {
+                    accessToken: token.accessToken,
+                    reflashToken:token.reflashToken
+                },
                 user: {
-                    id:user.id,
-                    firstname:user.firstname,
-                    lastname: user.lastname,
-                    email:user.email,
-                    cep:user.cep,
-                }
+                    id:user.user.id,
+                    firstname:user.user.firstname,
+                    lastname: user.user.lastname,
+                    email:user.user.email,
+                    cep:user.user.cep,
+                },
+                roles: [...user.roles],
+                permissions: user.permissions
             };
-            console.log(obj);
+            
             return obj;
         }catch(error){
             throw new UnauthorizedException();
