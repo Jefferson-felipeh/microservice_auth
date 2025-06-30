@@ -7,7 +7,6 @@ import { LoginUserDto } from "./dtos/loginUser.dto";
 
 @Controller('auth')
 export class AuthController {
-
     //Método constructor_
     constructor(private authService:AuthService){}
     
@@ -37,7 +36,8 @@ export class AuthController {
 
     //Aqui iremos criar o endpoint que vai receber os dados da fila enviado pelo ms_users ao criar um usuário_
     @EventPattern('ms_auth_pattern')
-    handleEventpattern(@Payload() data) {
+    loadPolicyToUser(@Payload() data) {
         console.log(data);
+        // return this.authService.loadPolicyToUser(data);
     }
 }
