@@ -12,11 +12,10 @@ import { APP_GUARD } from '@nestjs/core';
 
 @Module({
     imports: [
-
-    //ThrottlerModule.forRoot({
-    //   ttl: 60,
-    //   limit: 10,
-    //}),
+        //ThrottlerModule.forRoot({
+        //   ttl: 60,
+        //   limit: 10,
+        //}),
 
         ConfigModule.forRoot({
             isGlobal: true,
@@ -36,6 +35,20 @@ import { APP_GUARD } from '@nestjs/core';
                 options: {
                     urls: ['amqp://guest:guest@localhost:5672'],
                     queue: 'ms_users',//Se conectando com a fila do ms_users;
+                    queueOptions: {
+                        durable: true
+                    }
+                }
+            }
+        ]),
+
+        ClientsModule.register([
+            {
+                name: 'MICROSERVICE_ROLE',
+                transport: Transport.RMQ,
+                options: {
+                    urls: ['amqp://guest:guest@localhost:5672'],
+                    queue: 'ms_role',
                     queueOptions: {
                         durable: true
                     }

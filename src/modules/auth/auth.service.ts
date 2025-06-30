@@ -1,4 +1,4 @@
-import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import { HttpException, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { lastValueFrom } from "rxjs";
 import * as bcrypt from 'bcrypt';
@@ -18,6 +18,7 @@ export class AuthService{
     constructor(
         @Inject('MICROSERVICE_USERS') private clientUser: ClientProxy,
         private jwtService:JwtService,
+        @Inject('MICROSERVICE_ROLE') private clientRole:ClientProxy,
         @Inject(JWTConfig.KEY)
         private jwtConfig:ConfigType<typeof JWTConfig>
     ){}
@@ -31,7 +32,7 @@ export class AuthService{
                 //o send() vai emitir uma mensagem e vai esperar um retorno_
                 this.clientUser.send('find-user-by-email',email.toLocaleLowerCase())
             );
-            console.log(user)
+            console.log(user);
             //Os usuários já deve retornar tanto os dados do usuários, quanto os dados das suas permissões_
             if(!user || user == null) throw new UnauthorizedException('Email Inválido!');
             
@@ -57,7 +58,8 @@ export class AuthService{
                     cep:user.user.cep,
                 },
                 roles: [...user.roles],
-                permissions: user.permissions
+                permissions: user.permissions,
+                menus: user.menus
             };
             
             return obj;
@@ -109,5 +111,11 @@ export class AuthService{
             accessToken,
             reflashToken
         }
+    }
+
+    async loadPolicyToUser(data){
+        if(!data) throw new HttpException('Erro ao obter dados',400);
+
+        this.clientRole.emit('load_Policy_To_User',data); 
     }
 }
