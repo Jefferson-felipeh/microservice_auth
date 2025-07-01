@@ -32,7 +32,7 @@ export class AuthService{
                 //o send() vai emitir uma mensagem e vai esperar um retorno_
                 this.clientUser.send('find-user-by-email',email.toLocaleLowerCase())
             );
-            console.log(user);
+            console.log(user)
             //Os usuários já deve retornar tanto os dados do usuários, quanto os dados das suas permissões_
             if(!user || user == null) throw new UnauthorizedException('Email Inválido!');
             
@@ -59,7 +59,8 @@ export class AuthService{
                 },
                 roles: [...user.roles],
                 permissions: user.permissions,
-                menus: user.menus
+                menus: user.menus,
+                profiles: user.profiles
             };
             
             return obj;
