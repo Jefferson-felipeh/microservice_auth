@@ -23,7 +23,7 @@ export class AuthService{
         private jwtConfig:ConfigType<typeof JWTConfig>
     ){}
 
-    async signIn(email:string,password:string):Promise<LoginUserDto>{
+    async signIn(email:string,password:string):Promise<string>{
         try{
             //Estou buscando os dados do usuário com base no email fornecido por ele na requisição de login,
             //Esses dados de email e password vem do LocalStrategy capturado pelo UseGuards() no endpoint_
@@ -45,25 +45,26 @@ export class AuthService{
 
             if(!token) throw new UnauthorizedException('Usuário não Autorizado!');
             
-            const obj = {
-                auth: {
-                    accessToken: token.accessToken,
-                    reflashToken:token.reflashToken
-                },
-                user: {
-                    id:user.user.id,
-                    firstname:user.user.firstname,
-                    lastname: user.user.lastname,
-                    email:user.user.email,
-                    cep:user.user.cep,
-                },
-                roles: [...user.roles],
-                permissions: user.permissions,
-                menus: user.menus,
-                profiles: user.profiles
-            };
+            // const obj = {
+            //     auth: {
+            //         accessToken: token.accessToken,
+            //         reflashToken:token.reflashToken
+            //     },
+            //     user: {
+            //         id:user.user.id,
+            //         firstname:user.user.firstname,
+            //         lastname: user.user.lastname,
+            //         email:user.user.email,
+            //         cep:user.user.cep,
+            //     },
+            //     roles: [...user.roles],
+            //     permissions: user.permissions,
+            //     menus: user.menus,
+            //     profiles: user.profiles
+            // };
             
-            return obj;
+            return token.accessToken;
+            
         }catch(error){
             throw new UnauthorizedException();
         }
