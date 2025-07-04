@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, Post, Request, UseGuards } from "@nestjs/common";
 import { EventPattern, Payload } from "@nestjs/microservices";
 import { Throttle } from "@nestjs/throttler";
 import { SignInDto } from "./dtos/signIn.dto";
@@ -29,10 +29,18 @@ export class AuthController {
 
     @HttpCode(200)
     @Post('login')
-    async signIn(@Body() dataSignIn: SignInDto):Promise<LoginUserDto> {
+    async signIn(@Body() dataSignIn: SignInDto):Promise<string> {
         //Por isso, o endpoint pode ser simples_
         return this.authService.signIn(dataSignIn.email,dataSignIn.password);
     }
+
+    // @UseGuards()
+    // @Get('data')
+    // async data_user():Promise<object>{
+    //     return {
+    //         status: 'rota acessada!'
+    //     }
+    // }
 
     //Aqui iremos criar o endpoint que vai receber os dados da fila enviado pelo ms_users ao criar um usuário_
     @EventPattern('ms_auth_pattern')
