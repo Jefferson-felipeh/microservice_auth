@@ -34,14 +34,6 @@ export class AuthController {
         return this.authService.signIn(dataSignIn.email,dataSignIn.password);
     }
 
-    // @UseGuards()
-    // @Get('data')
-    // async data_user():Promise<object>{
-    //     return {
-    //         status: 'rota acessada!'
-    //     }
-    // }
-
     //Aqui iremos criar o endpoint que vai receber os dados da fila enviado pelo ms_users ao criar um usuário_
     @EventPattern('ms_auth_pattern')
     loadPolicyToUser(@Payload() data) {
