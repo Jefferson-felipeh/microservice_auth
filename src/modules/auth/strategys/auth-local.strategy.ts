@@ -15,7 +15,7 @@ export class AuthLocalStrategy extends PassportStrategy(Strategy){
         });
     }
 
-    async validate(email:string,password:string):Promise<object>{
+    async validate(email:string,password:string):Promise<string>{
         //Aqui dentro eu construo toda a lógica de verificação dos dados do usuário, pegando os dados da requisição
         //e verificando se esses dados estão presentes no banco de dados, e o usuário esta autorizado;
             if(!email || !password) throw new UnauthorizedException('Dados não fornecidos!')
