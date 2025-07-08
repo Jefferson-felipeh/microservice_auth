@@ -32,7 +32,7 @@ export class AuthService{
                 //o send() vai emitir uma mensagem e vai esperar um retorno_
                 this.clientUser.send('find-user-by-email',email.toLocaleLowerCase())
             );
-            console.log(user)
+            // console.log(user.user)
             //Os usuários já deve retornar tanto os dados do usuários, quanto os dados das suas permissões_
             if(!user || user == null) throw new UnauthorizedException('Email Inválido!');
             
@@ -41,7 +41,7 @@ export class AuthService{
     
             if(!comparePassword) throw new UnauthorizedException('Senha Incorreta!');
             //Gerando o token de autorização_
-            const token = this.generatedToken({user: user.email, sub:user.id});
+            const token = this.generatedToken({user: user.user.email, sub:user.user.id});
 
             if(!token) throw new UnauthorizedException('Usuário não Autorizado!');
             
@@ -62,7 +62,7 @@ export class AuthService{
             //     menus: user.menus,
             //     profiles: user.profiles
             // };
-            
+            // console.log(token)
             return token.accessToken;
             
         }catch(error){
@@ -105,6 +105,7 @@ export class AuthService{
     }
 
     generatedToken(user:payloadDto):TokenInterface{
+        console.log(user)
         const payload = this.generatedPayload(user);
         const accessToken = this.generatedAcessToken(payload);
         const reflashToken = this.generatedReflashToken(payload);
