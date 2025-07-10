@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable, UnauthorizedException } from "@n
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from 'passport-local';
 import { AuthService } from "../auth.service";
+import { LoginUserDto } from "../dtos/loginUser.dto";
 
 @Injectable()
 //Essa é a estratégia do passport-local_
@@ -15,7 +16,7 @@ export class AuthLocalStrategy extends PassportStrategy(Strategy){
         });
     }
 
-    async validate(email:string,password:string):Promise<string>{
+    async validate(email:string,password:string):Promise<LoginUserDto>{
         //Aqui dentro eu construo toda a lógica de verificação dos dados do usuário, pegando os dados da requisição
         //e verificando se esses dados estão presentes no banco de dados, e o usuário esta autorizado;
             if(!email || !password) throw new UnauthorizedException('Dados não fornecidos!')
